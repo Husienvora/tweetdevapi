@@ -7,15 +7,13 @@ const OAuth = require("oauth-1.0a");
 const getRequest = async ({ oauth_token, oauth_token_secret }) => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
-  const id = "1516717736604618752";
 
   // You can replace Tweet ID given with the Tweet ID you wish to like.
   // You can find a Tweet ID by using the Tweet lookup endpoint
-  const data = {
-    tweet_id: "1517380152048553985",
-  };
-
-  const endpointURL = `https://api.twitter.com/2/users/${id}/likes`;
+  const usernames = "TwitterDev,Husien_vora";
+  const params =
+    "user.fields=created_at,description&expansions=pinned_tweet_id";
+  const endpointURL = `https://api.twitter.com/2/users/by?usernames=${usernames}&${params}`;
 
   // Get request token
   const oauth = OAuth({
@@ -37,24 +35,20 @@ const getRequest = async ({ oauth_token, oauth_token_secret }) => {
     oauth.authorize(
       {
         url: endpointURL,
-        method: "POST",
+        method: "GET",
       },
       token
     )
   );
 
-  const req = await got.post(endpointURL, {
-    json: data,
-    responseType: "json",
+  const req = await got(endpointURL, {
     headers: {
       Authorization: authHeader["Authorization"],
-      "user-agent": "v2LikeTweetJS",
-      "content-type": "application/json",
-      accept: "application/json",
+      "user-agent": "v2UserLookupJS",
     },
   });
   if (req.body) {
-    return req.body;
+    return JSON.parse(req.body);
   } else {
     throw new Error("Unsuccessful request");
   }
