@@ -1,5 +1,5 @@
-const authdb = require("../models/authdb");
-const User = require("../models/User");
+const authdb = require("../../models/authdb");
+const User = require("../../models/User");
 const { accessToken } = require("./accessToken");
 const { getRequest } = require("./getRequest");
 const exec = async (req, res) => {
@@ -27,7 +27,6 @@ const exec = async (req, res) => {
   };
   User.create(authaccess);
 
-  const response = await getRequest(authaccess);
-  res.send(response);
+  res.send("done");
 };
 module.exports = { exec };

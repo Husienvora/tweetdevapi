@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 const connectDB = require("./db/connect");
 app.use(express.json());
-app.use("/api/v1/tweet", router);
+app.use("/api/v1/twitter", router);
 const port = process.env.PORT || 3000;
 const start = async () => {
   try {

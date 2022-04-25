@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const { requestToken } = require("./requestToken");
 
-const authdb = require("../models/authdb");
+const authdb = require("../../models/authdb");
 const _initauth = async (req, res) => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
