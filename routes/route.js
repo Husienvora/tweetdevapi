@@ -6,7 +6,9 @@ const { exec } = require("../controllers/Authentication/exec");
 const { createtweet } = require("../controllers/apicontrols/createtweet");
 const { deletetweet } = require("../controllers/apicontrols/deletetweet");
 const { filteredstream } = require("../controllers/apicontrols/filteredstream");
-const { follow_lookup } = require("../controllers/apicontrols/follow_lookup");
+const {
+  following_lookup,
+} = require("../controllers/apicontrols/following_lookup");
 const { follow_user } = require("../controllers/apicontrols/follow_user");
 const { like_tweet } = require("../controllers/apicontrols/like_tweet");
 const { retweet_tweet } = require("../controllers/apicontrols/retweet_tweet");
@@ -15,17 +17,21 @@ const { Stream } = require("../controllers/apicontrols/Stream");
 const { undo_retweet } = require("../controllers/apicontrols/undo_retweet");
 const { unfollow_user } = require("../controllers/apicontrols/unfollow_user");
 const { unlike_tweet } = require("../controllers/apicontrols/unlike_tweet");
+const {
+  followers_lookup,
+} = require("../controllers/apicontrols/followers_lookup");
 router.route("/authentication").get(_initauth).post(exec);
 router.route("/like").post(like_tweet).delete(unlike_tweet);
 router
   .route("/follow")
-  .get(follow_lookup)
+
   .post(follow_user)
   .delete(unfollow_user);
 router.route("/retweet").post(retweet_tweet).delete(undo_retweet);
 router.route("/stream").post(Stream);
-router.route("/filteredstream/:no").post(filteredstream);
-router.route("/retweetedby/:id").post(retweetlookup);
+router.route("/filteredstream").post(filteredstream);
+router.route("/retweetedby").post(retweetlookup);
 router.route("/tweet").post(createtweet).delete(deletetweet);
-
+router.route("/follow/following").post(following_lookup);
+router.route("/follow/followers").post(followers_lookup);
 module.exports = router;
