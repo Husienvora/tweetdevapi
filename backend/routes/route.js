@@ -20,6 +20,9 @@ const { unlike_tweet } = require("../controllers/apicontrols/unlike_tweet");
 const {
   followers_lookup,
 } = require("../controllers/apicontrols/followers_lookup");
+
+const { getAvatar } = require("../controllers/apicontrols/get-twitter-avatars");
+const { getUser } = require("../controllers/apicontrols/getUser");
 router.route("/authentication").get(_initauth).post(exec);
 router.route("/like").post(like_tweet).delete(unlike_tweet);
 router
@@ -34,4 +37,6 @@ router.route("/retweetedby").post(retweetlookup);
 router.route("/tweet").post(createtweet).delete(deletetweet);
 router.route("/follow/following").post(following_lookup);
 router.route("/follow/followers").post(followers_lookup);
+router.route("/user-photo").post(getAvatar);
+router.route("/finduser").post(getUser);
 module.exports = router;
