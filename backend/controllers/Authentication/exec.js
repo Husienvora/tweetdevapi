@@ -1,7 +1,7 @@
 const authdb = require("../../models/authdb");
 const User = require("../../models/User");
 const { accessToken } = require("./accessToken");
-const { getRequest } = require("./getRequest");
+
 const exec = async (req, res) => {
   const { pin } = req.body;
 
