@@ -9,10 +9,18 @@ const AppProvider = ({ children }) => {
   const [Followers, setFollowers] = useState(null);
   const [Following, setFollowing] = useState(null);
   const [Useravatar, setUseravatar] = useState({});
+  const [aLogin, setaLogin] = useState(true);
+  const [AenterPin, setAenterPin] = useState(false);
   const authenticate = async () => {
-    await axios.get(BaseUrl + "/twitter/authentication").then((res) => {
-      return res.data;
-    });
+    let url = await axios
+      .get(BaseUrl + "/twitter/authentication")
+      .then((res) => {
+        return res.data;
+      });
+    setAenterPin(true);
+    url = url.replace("api.", ""); //until api.twitter gets fixed
+
+    window.open(url, "_blank", "noopener,noreferrer");
   };
   const Enterpin = async (pin) => {
     await axios.post(BaseUrl + "/twitter/authentication", {
@@ -144,6 +152,10 @@ const AppProvider = ({ children }) => {
         Username,
         Followers,
         Following,
+        aLogin,
+        setaLogin,
+        AenterPin,
+        setAenterPin,
         authenticate,
         Enterpin,
         Stream,

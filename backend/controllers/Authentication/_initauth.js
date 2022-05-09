@@ -14,19 +14,9 @@ const _initauth = async (req, res) => {
   console.log(consumer_key, consumer_secret);
 
   // this example uses PIN-based OAuth to authorize the user
-  const requestTokenURL =
-    "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write";
+
   const authorizeURL = new URL("https://api.twitter.com/oauth/authorize");
-  const accessTokenURL = "https://api.twitter.com/oauth/access_token";
-  const oauth = OAuth({
-    consumer: {
-      key: consumer_key,
-      secret: consumer_secret,
-    },
-    signature_method: "HMAC-SHA1",
-    hash_function: (baseString, key) =>
-      crypto.createHmac("sha1", key).update(baseString).digest("base64"),
-  });
+
   // Get request token
   const oAuthRequestToken = await requestToken();
   // Get authorization

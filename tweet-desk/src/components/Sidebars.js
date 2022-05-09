@@ -35,7 +35,7 @@ const Sidebars = () => {
               />
             </button>
           </div>
-          <div className="mx-1">
+          <div className="mx-1 ml-2 ">
             <button>
               <img
                 className="mx-auto relative top-1 h-7 rounded-full sm:mx-0 sm:shrink-0"

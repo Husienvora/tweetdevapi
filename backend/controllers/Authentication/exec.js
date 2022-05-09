@@ -27,6 +27,6 @@ const exec = async (req, res) => {
   };
   User.create(authaccess);
 
-  res.send("done");
+  res.send({ new_user: authaccesss.screen_name });
 };
 module.exports = { exec };

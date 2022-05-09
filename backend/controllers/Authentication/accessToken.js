@@ -1,5 +1,7 @@
 const got = require("got");
 
+require("dotenv").config();
+
 const { URLSearchParams } = require("url");
 const crypto = require("crypto");
 const OAuth = require("oauth-1.0a");
@@ -7,10 +9,8 @@ const OAuth = require("oauth-1.0a");
 const accessToken = async ({ oauth_token, oauth_token_secret }, verifier) => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
-  const requestTokenURL =
-    "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write";
-  const authorizeURL = new URL("https://api.twitter.com/oauth/authorize");
-  const accessTokenURL = "https://api.twitter.com/oauth/access_token";
+
+  const accessTokenURL = "https://twitter.com/oauth/access_token"; //until api.twitter is fixed
 
   const oauth = OAuth({
     consumer: {
@@ -29,7 +29,7 @@ const accessToken = async ({ oauth_token, oauth_token_secret }, verifier) => {
   );
 
   // Get request token
-  const path = `https://api.twitter.com/oauth/access_token?oauth_verifier=${verifier}&oauth_token=${oauth_token}`;
+  const path = `https://twitter.com/oauth/access_token?oauth_verifier=${verifier}&oauth_token=${oauth_token}`; //until api.twitter is fixed
 
   const req = await got.post(path, {
     headers: {

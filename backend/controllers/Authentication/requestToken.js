@@ -1,5 +1,7 @@
 const got = require("got");
 
+require("dotenv").config();
+
 const { URLSearchParams } = require("url");
 const crypto = require("crypto");
 const OAuth = require("oauth-1.0a");
@@ -8,9 +10,7 @@ const requestToken = async () => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
   const requestTokenURL =
-    "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write";
-  const authorizeURL = new URL("https://api.twitter.com/oauth/authorize");
-  const accessTokenURL = "https://api.twitter.com/oauth/access_token";
+    "https://twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write"; //until api.twitter gets fixed
 
   // Get request token
   const oauth = OAuth({
