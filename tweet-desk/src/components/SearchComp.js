@@ -10,6 +10,7 @@ const SearchComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2  border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             Search a user
           </div>

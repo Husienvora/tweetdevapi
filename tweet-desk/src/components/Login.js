@@ -2,15 +2,22 @@ import React, { useRef, useState } from "react";
 import { useGlobalContext } from "./context";
 
 const Login = () => {
-  const { authenticate, Enterpin, AenterPin, setAenterPin, setaLogin } =
-    useGlobalContext();
+  const {
+    authenticate,
+    Enterpin,
+    AenterPin,
+    setAenterPin,
+    setaLogin,
+    setCookie,
+    cookies,
+  } = useGlobalContext();
   const inputPin = useRef(null);
   return (
     <>
       <div className=" -z-20 flex justify-center mt-7 space-x-1 ">
         <div>
           <img
-            class="h-6"
+            className="h-6"
             src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
           ></img>
         </div>
@@ -31,6 +38,7 @@ const Login = () => {
                 className="bg-cyan-400 py-1 px-3 rounded-xl shadow-xl hover:bg-cyan-300 ml-8 f"
                 onClick={() => {
                   Enterpin(String(inputPin.current.innerHTML));
+
                   setaLogin(false);
                 }}
               >

@@ -4,6 +4,7 @@ const userComp = () => {
   return (
     <>
       {/*--User--*/}
+
       <div className="bg-white md-1:order-1 ">
         <div className=" mt-8  flex flex-col justify-center items-center ">
           <div className="">
@@ -35,6 +36,7 @@ const userComp = () => {
           <div
             className="bg-white  w-full  h-52 mt-2 mx-2 border-b-2 border-opacity-25 border-gray-500 text-xl text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             Write something to tweet or write tweet-id to delete
           </div>
@@ -53,6 +55,7 @@ const userComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2 mx-2  border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             tweet-id to retweet/undoretweet
           </div>
@@ -72,6 +75,7 @@ const userComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             Username to follow/unfollow
           </div>
@@ -90,6 +94,7 @@ const userComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             tweet id to like/unlike
           </div>
@@ -108,6 +113,7 @@ const userComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            suppressContentEditableWarning={true}
           >
             tweet id to Block/Unblock
           </div>

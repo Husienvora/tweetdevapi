@@ -2,9 +2,10 @@ import React from "react";
 import { useGlobalContext } from "./context";
 
 const Sidebars = () => {
-  const { authenticate } = useGlobalContext();
+  const { authenticate, cookies } = useGlobalContext();
   return (
     <>
+      <div>{console.log(cookies)}</div>
       <div className="fixed top-11 h-screen w-11 bg-gray-300 "></div>
       <div className="fixed h-11 w-screen bg-gray-300 ">
         <div className="flex justify-start py-1  flex-nowrap w-auto ">

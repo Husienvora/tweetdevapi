@@ -10,7 +10,7 @@ const accessToken = async ({ oauth_token, oauth_token_secret }, verifier) => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
 
-  const accessTokenURL = "https://twitter.com/oauth/access_token"; //until api.twitter is fixed
+  const accessTokenURL = "https://api.twitter.com/oauth/access_token"; //until api.twitter is fixed
 
   const oauth = OAuth({
     consumer: {

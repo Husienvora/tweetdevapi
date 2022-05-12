@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
@@ -11,6 +12,16 @@ const AppProvider = ({ children }) => {
   const [Useravatar, setUseravatar] = useState({});
   const [aLogin, setaLogin] = useState(true);
   const [AenterPin, setAenterPin] = useState(false);
+  const [cookies, setCookie] = useCookies();
+  let Temp = null;
+  const [addCoookieflag, setaddCookieflag] = useState(false);
+  useEffect(() => {
+    if (!cookies.accountCount) {
+      setCookie("accountCount", "0", { path: "/" });
+    }
+  }, []);
+
+  const Users = [];
   const authenticate = async () => {
     let url = await axios
       .get(BaseUrl + "/twitter/authentication")
@@ -23,10 +34,24 @@ const AppProvider = ({ children }) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
   const Enterpin = async (pin) => {
-    await axios.post(BaseUrl + "/twitter/authentication", {
-      pin: pin,
+    await axios
+      .post(BaseUrl + "/twitter/authentication", {
+        pin: pin,
+      })
+
+      .then((res) => {
+        Temp = res.data;
+
+        //setaddCookieflag(!addCoookieflag);
+      });
+    setCookie("accountCount", String(parseInt(cookies.accountCount) + 1), {
+      path: "/",
     });
+    //setTemp(res.data);
+
+    setCookie(`User${parseInt(cookies.accountCount) + 1}`, Temp, { path: "/" });
   };
+
   const Stream = async () => {
     await axios
       .post(BaseUrl + "/twitter/stream", {
@@ -148,12 +173,15 @@ const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
+        Users,
         Streamcache,
         Username,
         Followers,
         Following,
         aLogin,
         setaLogin,
+        setCookie,
+        cookies,
         AenterPin,
         setAenterPin,
         authenticate,
