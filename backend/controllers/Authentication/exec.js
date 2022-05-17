@@ -25,7 +25,7 @@ const exec = async (req, res) => {
     user_id: oAuthAccessToken.get("user_id"),
     screen_name: oAuthAccessToken.get("screen_name"),
   };
-  User.create(authaccess);
+  //User.create(authaccess);
 
   res.send({ User: authaccess.screen_name, User_id: authaccess.user_id });
 };

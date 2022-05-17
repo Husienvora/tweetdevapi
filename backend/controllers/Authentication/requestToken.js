@@ -10,7 +10,7 @@ const requestToken = async () => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
   const requestTokenURL =
-    "https://twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write"; //until api.twitter gets fixed
+    "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write"; //until api.twitter gets fixed
 
   // Get request token
   const oauth = OAuth({

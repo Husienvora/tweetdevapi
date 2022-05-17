@@ -20,7 +20,7 @@ const getAvatar = async (req, res) => {
       () => document.querySelector('a[href$="/photo"] img').src
     );
     await browser.close();
-    res.send({ twitterUsername: url });
+    res.send(url);
   } catch (error) {
     console.log("url prblem");
   }

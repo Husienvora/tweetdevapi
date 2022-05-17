@@ -1,47 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "./context";
 
 const Sidebars = () => {
-  const { authenticate, cookies } = useGlobalContext();
+  const {
+    setaLogin,
+    User_avatar,
+    UserAvatar,
+    setUserAvatar,
+    setaLoading,
+    LoggedIn,
+    Users,
+  } = useGlobalContext();
+  const demo = ["Husien_vora", "elonmusk"];
+  const [Flag, setFlag] = useState(false);
+  console.log(Users);
+  useEffect(() => {
+    if (Users) {
+      for (let i = 0; i <= demo.length - 1; i++) {
+        User_avatar(Users[i]);
+      }
+    }
+    //setUserAvatar([...new Set(UserAvatar)]);
+  }, []);
+
   return (
     <>
-      <div>{console.log(cookies)}</div>
       <div className="fixed top-11 h-screen w-11 bg-gray-300 "></div>
       <div className="fixed h-11 w-screen bg-gray-300 ">
         <div className="flex justify-start py-1  flex-nowrap w-auto ">
-          <div className="mx-1">
-            <button>
-              <img
-                className="mx-auto h-9 rounded-full hover:ring-4  sm:mx-0 sm:shrink-0"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2WWJEImdtBVeLhMDBgSTAfvvju5KltNqo2A&usqp=CAU"
-                alt="Woman's Face"
-              />
-            </button>
-          </div>
-          <div className="mx-1">
-            <button>
-              <img
-                className="mx-auto  h-9 rounded-full  hover:ring-4 sm:mx-0 sm:shrink-0"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC3I7gds6qoPcD7eNTdWNaYAYttpVqJLQKjw&usqp=CAU"
-                alt="Woman's Face"
-              />
-            </button>
-          </div>
-          <div className="mx-1">
-            <button className="">
-              <img
-                className="mx-auto h-9 rounded-full hover:ring-4 m:mx-0 sm:shrink-0"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKDeYkGVyoE3xtyrVRiAzl20Xc8nR6bvVngw&usqp=CAU"
-                alt="Woman's Face"
-              />
-            </button>
-          </div>
+          {Users.map((user, index) => {
+            {
+              console.log(UserAvatar);
+            }
+            return (
+              <div className="mx-1">
+                <button className={user}>
+                  <img
+                    className="mx-auto h-9 rounded-full hover:ring-4  sm:mx-0 sm:shrink-0"
+                    src={UserAvatar[user]}
+                    alt=""
+                  />
+                </button>
+              </div>
+            );
+          })}
+
           <div className="mx-1 ml-2 ">
-            <button>
+            <button
+              onClick={() => {
+                setaLogin(true);
+              }}
+            >
               <img
                 className="mx-auto relative top-1 h-7 rounded-full sm:mx-0 sm:shrink-0"
                 src="https://cdn-icons-png.flaticon.com/512/1828/1828926.png"
-                alt="Woman's Face"
+                alt="add"
               />
             </button>
           </div>

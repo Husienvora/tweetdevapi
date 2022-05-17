@@ -8,6 +8,8 @@ const Login = () => {
     AenterPin,
     setAenterPin,
     setaLogin,
+    User_avatar,
+    Users,
     setCookie,
     cookies,
   } = useGlobalContext();
@@ -38,8 +40,6 @@ const Login = () => {
                 className="bg-cyan-400 py-1 px-3 rounded-xl shadow-xl hover:bg-cyan-300 ml-8 f"
                 onClick={() => {
                   Enterpin(String(inputPin.current.innerHTML));
-
-                  setaLogin(false);
                 }}
               >
                 Login
@@ -51,7 +51,6 @@ const Login = () => {
             className="bg-cyan-400 py-1 px-3 rounded-xl shadow-xl hover:bg-cyan-300  "
             onClick={() => {
               authenticate();
-              setAenterPin(true);
             }}
           >
             Login in your twitter account and authorize
