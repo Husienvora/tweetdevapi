@@ -17,6 +17,7 @@ const AppProvider = ({ children }) => {
   let Avataar = "";
   const LoggedIn = [];
   const [Users, setUsers] = useState([]);
+  const cancelTokenSource = axios.CancelToken.source();
   let Temp = null;
 
   useEffect(() => {
@@ -38,15 +39,30 @@ const AppProvider = ({ children }) => {
   }, []);
 
   const User_avatar = async (twitterUsername) => {
-    let user = twitterUsername;
-    let avatarUrl = await axios
-      .post(BaseUrl + "/twitter/user-photo", {
-        twitterUsername: twitterUsername,
-      })
-      .then((res) => {
-        return res.data;
-      });
-    setUserAvatar((old) => ({ ...old, [user]: avatarUrl }));
+    try {
+      let user = twitterUsername;
+      let avatarUrl = await axios
+        .post(
+          BaseUrl + "/twitter/user-photo",
+          {
+            twitterUsername: twitterUsername,
+          },
+          {
+            cancelToken: cancelTokenSource.token,
+          }
+        )
+        .then((res) => {
+          return res.data;
+        });
+      console.log({ [user]: avatarUrl });
+      if (!eval(`cookies.${user}`)) {
+        setCookie(`${user}`, avatarUrl, { path: "/" });
+      }
+
+      setUserAvatar((old) => ({ ...old, [user]: avatarUrl }));
+    } catch (error) {
+      console.log("Done");
+    }
   };
   const authenticate = async () => {
     let url = await axios
@@ -75,6 +91,7 @@ const AppProvider = ({ children }) => {
     setCookie(`User${parseInt(cookies.accountCount) + 1}`, user, { path: "/" });
     User_avatar(user.User);
     setaLogin(false);
+    setaLoading(false);
 
     setAenterPin(false);
   };
@@ -207,6 +224,7 @@ const AppProvider = ({ children }) => {
         AenterPin,
         LoggedIn,
         UserAvatar,
+        cancelTokenSource,
         setAenterPin,
         setaLoading,
         authenticate,

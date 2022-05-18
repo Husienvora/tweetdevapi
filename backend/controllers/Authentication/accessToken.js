@@ -29,7 +29,7 @@ const accessToken = async ({ oauth_token, oauth_token_secret }, verifier) => {
   );
 
   // Get request token
-  const path = `https://api.twitter.com/oauth/access_token?oauth_verifier=${verifier}&oauth_token=${oauth_token}&oauth_callback=oob`; //until api.twitter is fixed
+  const path = `https://api.twitter.com/oauth/access_token?oauth_verifier=${verifier}&oauth_token=${oauth_token}&oauth_callback=oob`; // &oauth_callback=oob; //until api.twitter is fixed
 
   const req = await got.post(path, {
     headers: {

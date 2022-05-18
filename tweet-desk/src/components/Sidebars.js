@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "./context";
-
+import { FaSpinner } from "react-icons/fa";
+import axios from "axios";
 const Sidebars = () => {
   const {
     setaLogin,
@@ -10,18 +11,26 @@ const Sidebars = () => {
     setaLoading,
     LoggedIn,
     Users,
+
+    cookies,
   } = useGlobalContext();
   const demo = ["Husien_vora", "elonmusk"];
   const [Flag, setFlag] = useState(false);
-  console.log(Users);
+  const cancelTokenSource = axios.CancelToken.source();
   useEffect(() => {
     if (Users) {
-      for (let i = 0; i <= demo.length - 1; i++) {
-        User_avatar(Users[i]);
+      for (let i = 0; i <= Users.length - 1; i++) {
+        if (!eval(`cookies.${Users[i]}`)) {
+          User_avatar(Users[i]);
+        }
       }
     }
+
     //setUserAvatar([...new Set(UserAvatar)]);
-  }, []);
+  }, [Users]);
+  if (Users.length == 0 || Users.length != parseInt(cookies.accountCount)) {
+    window.location.reload();
+  }
 
   return (
     <>
@@ -29,18 +38,23 @@ const Sidebars = () => {
       <div className="fixed h-11 w-screen bg-gray-300 ">
         <div className="flex justify-start py-1  flex-nowrap w-auto ">
           {Users.map((user, index) => {
-            {
-              console.log(UserAvatar);
-            }
             return (
-              <div className="mx-1">
-                <button className={user}>
-                  <img
-                    className="mx-auto h-9 rounded-full hover:ring-4  sm:mx-0 sm:shrink-0"
-                    src={UserAvatar[user]}
-                    alt=""
-                  />
-                </button>
+              <div className="mx-1" key={user}>
+                {!eval(`cookies.${user}`) ? (
+                  <div className="mt-2 ">
+                    <button className={user}>
+                      <FaSpinner className="animate-spin" size={22} />
+                    </button>
+                  </div>
+                ) : (
+                  <button className={user}>
+                    <img
+                      className="mx-auto h-9 rounded-full hover:ring-4  sm:mx-0 sm:shrink-0"
+                      src={eval(`cookies.${user}`)}
+                      alt=""
+                    />
+                  </button>
+                )}
               </div>
             );
           })}

@@ -1,6 +1,7 @@
 const Puppeteer = require("puppeteer");
 const getAvatar = async (req, res) => {
   const { twitterUsername } = req.body;
+  //console.log(twitterUsername);
   const browser = await Puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
@@ -8,7 +9,7 @@ const getAvatar = async (req, res) => {
   try {
     await page.goto(`https://twitter.com/${twitterUsername}`);
   } catch (error) {
-    console.log("goto problem");
+    //console.log("goto problem");
   }
   try {
     await page.waitForSelector('a[href$="/photo"] img[src]');
@@ -21,6 +22,7 @@ const getAvatar = async (req, res) => {
     );
     await browser.close();
     res.send(url);
+    return;
   } catch (error) {
     console.log("url prblem");
   }

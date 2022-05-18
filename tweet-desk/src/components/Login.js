@@ -6,6 +6,7 @@ const Login = () => {
     authenticate,
     Enterpin,
     AenterPin,
+    setaLoading,
     setAenterPin,
     setaLogin,
     User_avatar,
@@ -40,6 +41,7 @@ const Login = () => {
                 className="bg-cyan-400 py-1 px-3 rounded-xl shadow-xl hover:bg-cyan-300 ml-8 f"
                 onClick={() => {
                   Enterpin(String(inputPin.current.innerHTML));
+                  setaLoading(true);
                 }}
               >
                 Login
