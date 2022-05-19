@@ -20,6 +20,24 @@ module.exports = {
       height: {
         "h-97": "30rem",
       },
+      transitionProperty: {
+        height: "height",
+        spacing: "margin, padding",
+        opacity: "opacity",
+      },
+      transitionDuration: {
+        0: "0ms",
+        2000: "2000ms",
+      },
+      transitionTimingFunction: {
+        "in-expo": "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
+        "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
+      },
+      transitionDelay: {
+        0: "0ms",
+        2000: "2000ms",
+      },
+
       // ...
     },
   },

@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "./context";
 import { FaSpinner } from "react-icons/fa";
-import axios from "axios";
-const Sidebars = () => {
-  const {
-    setaLogin,
-    User_avatar,
-    UserAvatar,
-    setUserAvatar,
-    setaLoading,
-    LoggedIn,
-    Users,
 
-    cookies,
-  } = useGlobalContext();
-  const demo = ["Husien_vora", "elonmusk"];
-  const [Flag, setFlag] = useState(false);
-  const cancelTokenSource = axios.CancelToken.source();
+const Sidebars = () => {
+  const { setaLogin, User_avatar, Users, cookies } = useGlobalContext();
+
   useEffect(() => {
     if (Users) {
       for (let i = 0; i <= Users.length - 1; i++) {
@@ -42,9 +30,7 @@ const Sidebars = () => {
               <div className="mx-1" key={user}>
                 {!eval(`cookies.${user}`) ? (
                   <div className="mt-2 ">
-                    <button className={user}>
-                      <FaSpinner className="animate-spin" size={22} />
-                    </button>
+                    <FaSpinner className="animate-spin" size={22} />
                   </div>
                 ) : (
                   <button className={user}>

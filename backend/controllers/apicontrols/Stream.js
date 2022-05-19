@@ -24,7 +24,7 @@ const Stream = async (req, res) => {
         try {
           const json = JSON.parse(data);
 
-          streamarr.push(json);
+          streamarr.push(json.data);
 
           if (streamarr.length > amount) {
             res.send(streamarr);
@@ -70,5 +70,6 @@ const Stream = async (req, res) => {
   (async () => {
     streamConnect(0);
   })();
+  return;
 };
 module.exports = { Stream };

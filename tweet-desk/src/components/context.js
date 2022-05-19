@@ -5,7 +5,7 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const BaseUrl = "http://localhost:5000/api/v1";
-  const [Streamcache, setStreamcache] = useState(null);
+  const [Streamcache, setStreamcache] = useState([]);
   const [Username, setUsername] = useState(null);
   const [Followers, setFollowers] = useState(null);
   const [Following, setFollowing] = useState(null);
@@ -42,19 +42,13 @@ const AppProvider = ({ children }) => {
     try {
       let user = twitterUsername;
       let avatarUrl = await axios
-        .post(
-          BaseUrl + "/twitter/user-photo",
-          {
-            twitterUsername: twitterUsername,
-          },
-          {
-            cancelToken: cancelTokenSource.token,
-          }
-        )
+        .post(BaseUrl + "/twitter/user-photo", {
+          twitterUsername: twitterUsername,
+        })
         .then((res) => {
           return res.data;
         });
-      console.log({ [user]: avatarUrl });
+
       if (!eval(`cookies.${user}`)) {
         setCookie(`${user}`, avatarUrl, { path: "/" });
       }
@@ -97,13 +91,25 @@ const AppProvider = ({ children }) => {
   };
 
   const Stream = async () => {
-    await axios
-      .post(BaseUrl + "/twitter/stream", {
-        amount: 10,
-      })
-      .then((res) => {
-        setStreamcache(res.data);
-      });
+    try {
+      let data = await axios
+        .post(
+          BaseUrl + "/twitter/stream",
+          {
+            amount: 3,
+          },
+          {
+            cancelToken: cancelTokenSource.token,
+          }
+        )
+        .then((res) => {
+          return res.data;
+        });
+      setStreamcache(data);
+      cancelTokenSource.cancel();
+    } catch (error) {
+      //console.log("done");
+    }
   };
 
   const Filtered_Stream = async (rules) => {
@@ -220,6 +226,7 @@ const AppProvider = ({ children }) => {
         setaLogin,
         setCookie,
         setUserAvatar,
+        setStreamcache,
         cookies,
         AenterPin,
         LoggedIn,
