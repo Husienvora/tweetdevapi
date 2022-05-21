@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { FaRetweet } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
-import Kefir from "kefir";
 
 import { useGlobalContext } from "./context";
 const StreamComp = () => {
-  const [Data, setData] = useState([1]);
-  const [Index, setIndex] = useState(0);
-  const { Stream, Streamcache, setStreamcache, cookies, setCookie } =
-    useGlobalContext();
-  const [Fetching, setFetching] = useState(true);
+  const { Stream, Streamcache } = useGlobalContext();
+
   const placeholder = [1, 2, 3, 4];
   useEffect(() => {
     if (Streamcache.length == 0) {
-      Stream();
+      //Stream();
     }
   }, []);
 
   setInterval(() => {
-    Stream();
+    //Stream();
   }, 19000);
 
   return (

@@ -1,20 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Cookies } from "react-cookie";
 import { useGlobalContext } from "./context";
 
 const Login = () => {
-  const {
-    authenticate,
-    Enterpin,
-    AenterPin,
-    setaLoading,
-    setAenterPin,
-    setaLogin,
-    User_avatar,
-    Users,
-    setCookie,
-    cookies,
-  } = useGlobalContext();
+  const { authenticate, Enterpin, AenterPin, setaLoading, cookies } =
+    useGlobalContext();
   const inputPin = useRef(null);
+
   return (
     <>
       <div className=" -z-20 flex justify-center mt-7 space-x-1 ">

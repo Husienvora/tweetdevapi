@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useGlobalContext } from "./context";
 import { FaSpinner } from "react-icons/fa";
 
 const Sidebars = () => {
-  const { setaLogin, User_avatar, Users, cookies } = useGlobalContext();
+  const {
+    setaLogin,
+    User_avatar,
+    Users,
+    cookies,
+    ChangeCurruser,
+    setCookie,
+    setFollowing,
+    setFollowers,
+    ChangedCurr,
+    setChangedCurr,
+  } = useGlobalContext();
 
   useEffect(() => {
-    if (Users) {
+    if (!Users || parseInt(cookies.accountCount) != Users.length) {
       for (let i = 0; i <= Users.length - 1; i++) {
         if (!eval(`cookies.${Users[i]}`)) {
           User_avatar(Users[i]);
@@ -22,6 +33,7 @@ const Sidebars = () => {
 
   return (
     <>
+      {console.log(Users)}
       <div className="fixed top-11 h-screen w-11 bg-gray-300 "></div>
       <div className="fixed h-11 w-screen bg-gray-300 ">
         <div className="flex justify-start py-1  flex-nowrap w-auto ">
@@ -33,7 +45,14 @@ const Sidebars = () => {
                     <FaSpinner className="animate-spin" size={22} />
                   </div>
                 ) : (
-                  <button className={user}>
+                  <button
+                    className={user}
+                    onClick={() => {
+                      ChangeCurruser(user);
+                      setFollowers(null);
+                      setFollowing(null);
+                    }}
+                  >
                     <img
                       className="mx-auto h-9 rounded-full hover:ring-4  sm:mx-0 sm:shrink-0"
                       src={eval(`cookies.${user}`)}
@@ -49,6 +68,7 @@ const Sidebars = () => {
             <button
               onClick={() => {
                 setaLogin(true);
+                setCookie("ChangedCurr", "false", { path: "/" });
               }}
             >
               <img

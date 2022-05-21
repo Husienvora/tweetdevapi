@@ -14,6 +14,7 @@ const AppProvider = ({ children }) => {
   const [AenterPin, setAenterPin] = useState(false);
   const [cookies, setCookie] = useCookies();
   const [aLoading, setaLoading] = useState(false);
+
   let Avataar = "";
   const LoggedIn = [];
   const [Users, setUsers] = useState([]);
@@ -21,6 +22,9 @@ const AppProvider = ({ children }) => {
   let Temp = null;
 
   useEffect(() => {
+    if (!cookies.ChangedCurr) {
+      setCookie("ChangedCurr", "false", { path: "/" });
+    }
     if (!cookies.accountCount) {
       setCookie("accountCount", "0", { path: "/" });
     }
@@ -37,6 +41,17 @@ const AppProvider = ({ children }) => {
     }
     setUsers(LoggedIn);
   }, []);
+
+  const ChangeCurruser = (user) => {
+    const fromIndex = Users.indexOf(user);
+    const toIndex = 0;
+
+    const element = Users.splice(fromIndex, 1)[0];
+
+    Users.splice(toIndex, 0, element);
+
+    setCookie("ChangedCurr", "true", { path: "/" });
+  };
 
   const User_avatar = async (twitterUsername) => {
     try {
@@ -125,72 +140,72 @@ const AppProvider = ({ children }) => {
 
   const Retweet = async (tweet_id) => {
     await axios.post(BaseUrl + "/twitter/retweet", {
-      username: Username,
+      username: Users[0],
       tweet_id: tweet_id,
     });
   };
 
   const Undo_Retweet = async (source_tweet_id) => {
+    console.log(Users[0]);
     await axios.delete(BaseUrl + "/twitter/retweet", {
-      username: Username,
-      source_tweet_id: source_tweet_id,
+      data: { username: Users[0], source_tweet_id: source_tweet_id },
     });
   };
 
   const Create_tweet = async (msg) => {
     await axios.post(BaseUrl + "/twitter/tweet", {
-      username: Username,
+      username: Users[0],
       msg: msg,
     });
   };
 
   const Delete_tweet = async (tweet_id) => {
     await axios.delete(BaseUrl + "/twitter/tweet", {
-      username: Username,
-      tweet_id: tweet_id,
+      data: { username: Users[0], tweet_id: tweet_id },
     });
   };
   const User_is_following = async (User_id) => {
-    await axios
+    let data = await axios
       .post(BaseUrl + "/twitter/follow/following", {
         userId: User_id,
       })
       .then((res) => {
-        setFollowing(res.data);
+        return res.data;
       });
+    setFollowing(data);
   };
   const Users_followers = async (User_id) => {
-    await axios
+    let data = await axios
       .post(BaseUrl + "/twitter/follow/followers", {
         userId: User_id,
       })
       .then((res) => {
-        setFollowers(res.data);
+        return res.data;
       });
+    setFollowers(data);
   };
   const Follow_UserId = async (target_user_id) => {
+    console.log(target_user_id);
     await axios.post(BaseUrl + "/twitter/follow", {
-      username: Username,
+      username: Users[0],
       target_user_id: target_user_id,
     });
   };
 
   const Unfollow_UserId = async (target_user_id) => {
     await axios.delete(BaseUrl + "/twitter/follow", {
-      username: Username,
-      target_user_id: target_user_id,
+      data: { username: Users[0], target_user_id: target_user_id },
     });
   };
   const Like_a_Tweet = async (tweet_id) => {
     await axios.post(BaseUrl + "/twitter/like", {
-      username: Username,
+      username: Users[0],
       tweet_id: tweet_id,
     });
   };
   const Undo_a_like = async (tweet_id) => {
     await axios.delete(BaseUrl + "/twitter/like", {
-      username: Username,
-      tweet_id: tweet_id,
+      data: { username: Users[0], tweet_id: tweet_id },
     });
   };
   const Retweet_lookup = async (tweet_id) => {
@@ -204,13 +219,27 @@ const AppProvider = ({ children }) => {
   };
 
   const User_lookup = async (username) => {
-    await axios
+    let data = await axios
       .post(BaseUrl + "/twitter/finduser", {
         username: username,
       })
       .then((res) => {
         return res.data;
       });
+    return data;
+  };
+
+  const Block_a_user = async (user_id) => {
+    await axios.post(BaseUrl + "/twitter/Block", {
+      username: Users[0],
+      target_user_id: user_id,
+    });
+  };
+
+  const unBlock_a_user = async (user_id) => {
+    await axios.delete(BaseUrl + "/twitter/unBlock", {
+      data: { username: Users[0], target_user_id: user_id },
+    });
   };
   return (
     <AppContext.Provider
@@ -225,8 +254,14 @@ const AppProvider = ({ children }) => {
         aLogin,
         setaLogin,
         setCookie,
+        setFollowers,
+        Block_a_user,
+        unBlock_a_user,
+        setFollowing,
         setUserAvatar,
         setStreamcache,
+        ChangeCurruser,
+
         cookies,
         AenterPin,
         LoggedIn,
@@ -251,6 +286,7 @@ const AppProvider = ({ children }) => {
         Retweet_lookup,
         User_avatar,
         User_lookup,
+        BaseUrl,
       }}
     >
       {children}

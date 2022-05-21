@@ -1,26 +1,105 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useGlobalContext } from "./context";
+import axios from "axios";
+const UserComp = () => {
+  const {
+    cookies,
+    Users,
+    User_is_following,
+    Users_followers,
+    Followers,
+    Following,
+    Undo_Retweet,
+    Retweet,
+    Create_tweet,
+    Delete_tweet,
+    User_lookup,
+    Like_a_Tweet,
+    Undo_a_like,
+    Follow_UserId,
+    Unfollow_UserId,
+    Block_a_user,
+    unBlock_a_user,
+    BaseUrl,
+  } = useGlobalContext();
 
-const userComp = () => {
+  const tweet = useRef(null);
+  const retweet = useRef(null);
+  const follow = useRef(null);
+  const Like = useRef(null);
+  const block = useRef(null);
+  useEffect(() => {
+    if (!Followers || !Following) {
+      for (let i = 1; i <= Users.length; i++) {
+        if (Users[0] == eval(`cookies.User${i}.User`)) {
+          User_is_following(eval(`cookies.User${i}.User_id`));
+          Users_followers(eval(`cookies.User${i}.User_id`));
+          break;
+        }
+      }
+    }
+  });
+
+  const FollowaUser = async (user) => {
+    let Userdata = await axios
+      .post(BaseUrl + "/twitter/finduser", {
+        username: user,
+      })
+      .then((res) => {
+        return res.data;
+      });
+
+    Follow_UserId(String(Userdata["data"][0]["id"]));
+  };
+  const unFollowaUser = async (user) => {
+    let Userdata = await axios
+      .post(BaseUrl + "/twitter/finduser", {
+        username: user,
+      })
+      .then((res) => {
+        return res.data;
+      });
+    Unfollow_UserId(String(Userdata["data"][0]["id"]));
+  };
+  const BlockaUser = async (user) => {
+    let Userdata = await axios
+      .post(BaseUrl + "/twitter/finduser", {
+        username: user,
+      })
+      .then((res) => {
+        return res.data;
+      });
+    Block_a_user(String(Userdata["data"][0]["id"]));
+  };
+  const unBlockaUser = async (user) => {
+    let Userdata = await axios
+      .post(BaseUrl + "/twitter/finduser", {
+        username: user,
+      })
+      .then((res) => {
+        return res.data;
+      });
+    unBlock_a_user(String(Userdata["data"][0]["id"]));
+  };
+
   return (
     <>
-      {/*--User--*/}
-
       <div className="bg-white md-1:order-1 ">
         <div className=" mt-8  flex flex-col justify-center items-center ">
           <div className="">
             <img
               className=" block h-20 rounded-full sm:mx-0 sm:shrink-0"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2WWJEImdtBVeLhMDBgSTAfvvju5KltNqo2A&usqp=CAU"
+              src={eval(`cookies.${Users[0]}`)}
             />
           </div>
-          <div className="mt-1">@Husien_vora</div>
+          <div className="mt-1">@{Users[0]}</div>
         </div>
         <div className=" h-7 mt-2 grid grid-cols-2 ">
           <div className=" mx-4 mt-1 flex justify-center">
-            <div className="">100</div>
+            <div className="">{!Followers ? "Loading" : Followers.length}</div>
           </div>
           <div className=" mx-4 mt-1 flex justify-center">
-            <div className="">2</div>
+            <div className="">{!Following ? "Loading" : Following.length}</div>
           </div>
         </div>
         <div className=" h-8  grid grid-cols-2">
@@ -37,15 +116,30 @@ const userComp = () => {
             className="bg-white  w-full  h-52 mt-2 mx-2 border-b-2 border-opacity-25 border-gray-500 text-xl text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
             suppressContentEditableWarning={true}
+            ref={tweet}
           >
             Write something to tweet or write tweet-id to delete
           </div>
         </div>
         <div className="bg-white h-10 flex justify-end">
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5 rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5 rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Create_tweet(String(tweet.current.innerHTML));
+              tweet.current.innerHTML =
+                "Write something to tweet or write tweet-id to delete";
+            }}
+          >
             tweet
           </button>
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5 rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5 rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Delete_tweet(String(tweet.current.innerHTML));
+              tweet.current.innerHTML =
+                "Write something to tweet or write tweet-id to delete";
+            }}
+          >
             Delete tweet
           </button>
         </div>
@@ -55,16 +149,29 @@ const userComp = () => {
           <div
             className="bg-white w-full  h-7 mt-2 mx-2  border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
+            ref={retweet}
             suppressContentEditableWarning={true}
           >
             tweet-id to retweet/undoretweet
           </div>
         </div>
         <div className="bg-white h-10 flex justify-end ">
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Retweet(String(retweet.current.innerHTML));
+              retweet.current.innerHTML = "tweet-id to retweet/undoretweet";
+            }}
+          >
             retweet
           </button>
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  whitespace-nowrap rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  whitespace-nowrap rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Undo_Retweet(String(retweet.current.innerHTML));
+              retweet.current.innerHTML = "tweet-id to retweet/undoretweet";
+            }}
+          >
             Undo retweet
           </button>
         </div>
@@ -76,15 +183,28 @@ const userComp = () => {
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
             suppressContentEditableWarning={true}
+            ref={follow}
           >
             Username to follow/unfollow
           </div>
         </div>
         <div className="bg-white h-10 flex justify-end">
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              FollowaUser(String(follow.current.innerHTML));
+              follow.current.innerHTML = "Username to follow/unfollow";
+            }}
+          >
             follow
           </button>
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              unFollowaUser(String(follow.current.innerHTML));
+              follow.current.innerHTML = "Username to follow/unfollow";
+            }}
+          >
             Unfollow
           </button>
         </div>
@@ -95,15 +215,28 @@ const userComp = () => {
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
             suppressContentEditableWarning={true}
+            ref={Like}
           >
             tweet id to like/unlike
           </div>
         </div>
         <div className="bg-white h-10 flex justify-end">
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Like_a_Tweet(String(Like.current.innerHTML));
+              Like.current.innerHTML = "tweet id to like/unlike";
+            }}
+          >
             like
           </button>
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              Undo_a_like(String(Like.current.innerHTML));
+              Like.current.innerHTML = "tweet id to like/unlike";
+            }}
+          >
             Unlike
           </button>
         </div>
@@ -114,15 +247,28 @@ const userComp = () => {
             className="bg-white w-full  h-7 mt-2  mx-2 border-b-2 border-opacity-25 border-gray-500 text-base  text-gray-500 hover:text-black shadow-md"
             contentEditable="true"
             suppressContentEditableWarning={true}
+            ref={block}
           >
             tweet id to Block/Unblock
           </div>
         </div>
         <div className="bg-white h-10 flex justify-end">
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              BlockaUser(String(block.current.innerHTML));
+              block.current.innerHTML = "tweet id to Block/Unblock";
+            }}
+          >
             Block
           </button>
-          <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
+          <button
+            className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+            onClick={() => {
+              unBlockaUser(String(block.current.innerHTML));
+              block.current.innerHTML = "tweet id to Block/Unblock";
+            }}
+          >
             Unblock
           </button>
         </div>
@@ -133,4 +279,4 @@ const userComp = () => {
   );
 };
 
-export default userComp;
+export default UserComp;
