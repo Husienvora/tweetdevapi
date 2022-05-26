@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useGlobalContext } from "./context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const UserComp = () => {
   const {
@@ -117,6 +119,7 @@ const UserComp = () => {
             contentEditable="true"
             suppressContentEditableWarning={true}
             ref={tweet}
+            spellCheck="false"
           >
             Write something to tweet or write tweet-id to delete
           </div>
@@ -151,6 +154,7 @@ const UserComp = () => {
             contentEditable="true"
             ref={retweet}
             suppressContentEditableWarning={true}
+            spellCheck="false"
           >
             tweet-id to retweet/undoretweet
           </div>
@@ -184,6 +188,7 @@ const UserComp = () => {
             contentEditable="true"
             suppressContentEditableWarning={true}
             ref={follow}
+            spellCheck="false"
           >
             Username to follow/unfollow
           </div>
@@ -216,6 +221,7 @@ const UserComp = () => {
             contentEditable="true"
             suppressContentEditableWarning={true}
             ref={Like}
+            spellCheck="false"
           >
             tweet id to like/unlike
           </div>
@@ -248,6 +254,7 @@ const UserComp = () => {
             contentEditable="true"
             suppressContentEditableWarning={true}
             ref={block}
+            spellCheck="false"
           >
             tweet id to Block/Unblock
           </div>

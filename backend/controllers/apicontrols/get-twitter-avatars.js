@@ -1,7 +1,7 @@
 const Puppeteer = require("puppeteer");
 const getAvatar = async (req, res) => {
   const { twitterUsername } = req.body;
-  //console.log(twitterUsername);
+  console.log(twitterUsername);
   const browser = await Puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
@@ -139,30 +140,138 @@ const AppProvider = ({ children }) => {
   };
 
   const Retweet = async (tweet_id) => {
-    await axios.post(BaseUrl + "/twitter/retweet", {
-      username: Users[0],
-      tweet_id: tweet_id,
-    });
+    await axios
+      .post(BaseUrl + "/twitter/retweet", {
+        username: Users[0],
+        tweet_id: tweet_id,
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("Retweet Succesful", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
 
   const Undo_Retweet = async (source_tweet_id) => {
     console.log(Users[0]);
-    await axios.delete(BaseUrl + "/twitter/retweet", {
-      data: { username: Users[0], source_tweet_id: source_tweet_id },
-    });
+    await axios
+      .delete(BaseUrl + "/twitter/retweet", {
+        data: { username: Users[0], source_tweet_id: source_tweet_id },
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("UndoRetweet Succesful", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
 
   const Create_tweet = async (msg) => {
-    await axios.post(BaseUrl + "/twitter/tweet", {
-      username: Users[0],
-      msg: msg,
-    });
+    await axios
+      .post(BaseUrl + "/twitter/tweet", {
+        username: Users[0],
+        msg: msg,
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("Tweet Succesful", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
 
   const Delete_tweet = async (tweet_id) => {
-    await axios.delete(BaseUrl + "/twitter/tweet", {
-      data: { username: Users[0], tweet_id: tweet_id },
-    });
+    await axios
+      .delete(BaseUrl + "/twitter/tweet", {
+        data: { username: Users[0], tweet_id: tweet_id },
+      })
+      .then((res) => {
+        if (res) {
+          toast.success("Tweet Deleted", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   const User_is_following = async (User_id) => {
     let data = await axios
@@ -186,27 +295,135 @@ const AppProvider = ({ children }) => {
   };
   const Follow_UserId = async (target_user_id) => {
     console.log(target_user_id);
-    await axios.post(BaseUrl + "/twitter/follow", {
-      username: Users[0],
-      target_user_id: target_user_id,
-    });
+    await axios
+      .post(BaseUrl + "/twitter/follow", {
+        username: Users[0],
+        target_user_id: target_user_id,
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("User followed", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
 
   const Unfollow_UserId = async (target_user_id) => {
-    await axios.delete(BaseUrl + "/twitter/follow", {
-      data: { username: Users[0], target_user_id: target_user_id },
-    });
+    await axios
+      .delete(BaseUrl + "/twitter/follow", {
+        data: { username: Users[0], target_user_id: target_user_id },
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("User unfollowed", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   const Like_a_Tweet = async (tweet_id) => {
-    await axios.post(BaseUrl + "/twitter/like", {
-      username: Users[0],
-      tweet_id: tweet_id,
-    });
+    await axios
+      .post(BaseUrl + "/twitter/like", {
+        username: Users[0],
+        tweet_id: tweet_id,
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("Tweet Liked", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   const Undo_a_like = async (tweet_id) => {
-    await axios.delete(BaseUrl + "/twitter/like", {
-      data: { username: Users[0], tweet_id: tweet_id },
-    });
+    await axios
+      .delete(BaseUrl + "/twitter/like", {
+        data: { username: Users[0], tweet_id: tweet_id },
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("Tweet Unliked", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   const Retweet_lookup = async (tweet_id) => {
     await axios
@@ -230,16 +447,70 @@ const AppProvider = ({ children }) => {
   };
 
   const Block_a_user = async (user_id) => {
-    await axios.post(BaseUrl + "/twitter/Block", {
-      username: Users[0],
-      target_user_id: user_id,
-    });
+    await axios
+      .post(BaseUrl + "/twitter/Block", {
+        username: Users[0],
+        target_user_id: user_id,
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("User blocked", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
 
   const unBlock_a_user = async (user_id) => {
-    await axios.delete(BaseUrl + "/twitter/unBlock", {
-      data: { username: Users[0], target_user_id: user_id },
-    });
+    await axios
+      .delete(BaseUrl + "/twitter/unBlock", {
+        data: { username: Users[0], target_user_id: user_id },
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success("User unblocked", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("There was a problem", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   return (
     <AppContext.Provider

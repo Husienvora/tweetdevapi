@@ -20,10 +20,14 @@ const { unlike_tweet } = require("../controllers/apicontrols/unlike_tweet");
 const {
   followers_lookup,
 } = require("../controllers/apicontrols/followers_lookup");
+const { userTimeline } = require("../controllers/apicontrols/userTimeline");
 const { Block_user } = require("../controllers/apicontrols/Block_user");
 const { unBlock_user } = require("../controllers/apicontrols/unBlock_user");
 const { getAvatar } = require("../controllers/apicontrols/get-twitter-avatars");
 const { getUser } = require("../controllers/apicontrols/getUser");
+const {
+  getNoofferandfin,
+} = require("../controllers/apicontrols/getNoofferandfin");
 router.route("/authentication").get(_initauth).post(exec);
 router.route("/like").post(like_tweet).delete(unlike_tweet);
 router
@@ -42,4 +46,6 @@ router.route("/user-photo").post(getAvatar);
 router.route("/finduser").post(getUser);
 router.route("/block").post(Block_user);
 router.route("/unblock").delete(unBlock_user);
+router.route("/getnoof").post(getNoofferandfin);
+router.route("/usertimeline").post(userTimeline);
 module.exports = router;

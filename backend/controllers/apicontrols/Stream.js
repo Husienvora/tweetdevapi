@@ -8,7 +8,8 @@ const OAuth = require("oauth-1.0a");
 const Stream = async (req, res) => {
   const { amount } = req.body;
   const token = process.env.BEARER_TOKEN;
-  const streamURL = "https://api.twitter.com/2/tweets/sample/stream";
+  const streamURL =
+    "https://api.twitter.com/2/tweets/search/stream?tweet.fields=attachments,author_id&expansions=attachments.media_keys&media.fields=height,url";
   function streamConnect(retryAttempt) {
     const stream = needle.get(streamURL, {
       headers: {
@@ -24,7 +25,7 @@ const Stream = async (req, res) => {
         try {
           const json = JSON.parse(data);
 
-          streamarr.push(json.data);
+          streamarr.push(json);
 
           if (streamarr.length > amount) {
             res.send(streamarr);

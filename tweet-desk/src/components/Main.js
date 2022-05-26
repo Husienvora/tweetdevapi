@@ -3,6 +3,7 @@ import Streamcomp from "./StreamComp";
 import UserComp from "./UserComp";
 import SearchComp from "./SearchComp";
 import { useGlobalContext } from "./context";
+import { ToastContainer } from "react-toastify";
 import Login from "./Login";
 const Main = () => {
   const { aLogin } = useGlobalContext();
@@ -12,6 +13,17 @@ const Main = () => {
         <Streamcomp />
         <UserComp />
         <SearchComp />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </>
   );
