@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGlobalContext } from "./context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,16 +29,29 @@ const UserComp = () => {
   const retweet = useRef(null);
   const follow = useRef(null);
   const Like = useRef(null);
+  const [TempFollower1, setTempFollower1] = useState();
   const block = useRef(null);
   useEffect(() => {
-    if (!Followers || !Following) {
+    if (!TempFollower1 || !Following) {
       for (let i = 1; i <= Users.length; i++) {
         if (Users[0] == eval(`cookies.User${i}.User`)) {
           User_is_following(eval(`cookies.User${i}.User_id`));
-          Users_followers(eval(`cookies.User${i}.User_id`));
+
           break;
         }
       }
+      const followers = async () => {
+        let follower = await axios
+          .post(BaseUrl + "/twitter/getnoof", {
+            userID: Users[0],
+          })
+          .then((res) => {
+            return res.data;
+          });
+
+        setTempFollower1(follower);
+      };
+      followers();
     }
   });
 
@@ -98,7 +111,16 @@ const UserComp = () => {
         </div>
         <div className=" h-7 mt-2 grid grid-cols-2 ">
           <div className=" mx-4 mt-1 flex justify-center">
-            <div className="">{!Followers ? "Loading" : Followers.length}</div>
+            <div className="">
+              {TempFollower1 ? (
+                TempFollower1[0]["formatted_followers_count"].replace(
+                  /followers|follower/gi,
+                  ""
+                )
+              ) : (
+                <div></div>
+              )}
+            </div>
           </div>
           <div className=" mx-4 mt-1 flex justify-center">
             <div className="">{!Following ? "Loading" : Following.length}</div>

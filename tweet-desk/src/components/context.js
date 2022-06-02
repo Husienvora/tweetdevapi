@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -15,14 +21,24 @@ const AppProvider = ({ children }) => {
   const [AenterPin, setAenterPin] = useState(false);
   const [cookies, setCookie] = useCookies();
   const [aLoading, setaLoading] = useState(false);
-
+  const Loading = useRef(null);
   let Avataar = "";
   const LoggedIn = [];
   const [Users, setUsers] = useState([]);
   const cancelTokenSource = axios.CancelToken.source();
+
   let Temp = null;
 
   useEffect(() => {
+    if (!cookies.streamval || cookies.streamval) {
+      setCookie(
+        "streamval",
+        `{"value": "meme has:media", "tag": "funny things"}`,
+        {
+          path: "/",
+        }
+      );
+    }
     if (!cookies.ChangedCurr) {
       setCookie("ChangedCurr", "false", { path: "/" });
     }
@@ -106,37 +122,51 @@ const AppProvider = ({ children }) => {
     setAenterPin(false);
   };
 
-  const Stream = async () => {
+  // const Stream = async () => {
+  //   try {
+  //     let data = await axios
+  //       .post(
+  //         BaseUrl + "/twitter/stream",
+  //         {
+  //           amount: 3,
+  //         },
+  //         {
+  //           cancelToken: cancelTokenSource.token,
+  //         }
+  //       )
+  //       .then((res) => {
+  //         return res.data;
+  //       });
+  //     setStreamcache(data);
+  //     cancelTokenSource.cancel();
+  //   } catch (error) {
+  //     //console.log("done");
+  //   }
+  // };
+  //"/twitter/filteredstream"
+  const Filtered_Stream = async (rules) => {
     try {
       let data = await axios
         .post(
-          BaseUrl + "/twitter/stream",
+          BaseUrl + "/twitter/filteredstream",
           {
             amount: 3,
+            rules: rules,
           },
           {
             cancelToken: cancelTokenSource.token,
           }
         )
         .then((res) => {
+          Loading.current.complete();
+          cancelTokenSource.cancel();
           return res.data;
         });
-      setStreamcache(data);
-      cancelTokenSource.cancel();
-    } catch (error) {
-      //console.log("done");
-    }
-  };
 
-  const Filtered_Stream = async (rules) => {
-    await axios
-      .post(BaseUrl + "/twitter/filteredstream", {
-        amount: 10,
-        rules: rules,
-      })
-      .then((res) => {
-        setStreamcache(res.data);
-      });
+      setStreamcache(data);
+    } catch (error) {
+      console.log("done");
+    }
   };
 
   const Retweet = async (tweet_id) => {
@@ -523,6 +553,7 @@ const AppProvider = ({ children }) => {
         Followers,
         Following,
         aLogin,
+        Loading,
         setaLogin,
         setCookie,
         setFollowers,
@@ -542,7 +573,7 @@ const AppProvider = ({ children }) => {
         setaLoading,
         authenticate,
         Enterpin,
-        Stream,
+        //Stream,
         Undo_Retweet,
         Retweet,
         Create_tweet,
