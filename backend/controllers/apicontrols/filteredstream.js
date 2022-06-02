@@ -8,7 +8,8 @@ const filteredstream = async (req, res) => {
   const { amount, rules } = req.body;
   const token = process.env.BEARER_TOKEN;
   const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
-  const streamURL = "https://api.twitter.com/2/tweets/search/stream";
+  const streamURL =
+    "https://api.twitter.com/2/tweets/search/stream?tweet.fields=attachments,author_id&expansions=attachments.media_keys&media.fields=height,url,preview_image_url";
   //---------------------------------------------------------------
   async function getAllRules() {
     const response = await needle("get", rulesURL, {
@@ -55,7 +56,7 @@ const filteredstream = async (req, res) => {
   //--------------------------------------------------------------
   async function setRules() {
     const data = {
-      add: rules,
+      add: [rules],
     };
 
     const response = await needle("post", rulesURL, data, {
@@ -81,17 +82,25 @@ const filteredstream = async (req, res) => {
       timeout: 20000,
     });
 
+    setTimeout(() => {
+      stream.request.abort();
+      res.send(streamarr);
+      return;
+    }, 10000);
+
     streamarr = [];
     stream
       .on("data", (data) => {
         try {
           const json = JSON.parse(data);
+          console.dir(json);
           streamarr.push(json);
 
-          if (streamarr.length > amount) {
-            res.send(streamarr);
-            stream.request.abort();
-          }
+          // if (streamarr.length > amount) {
+          //   res.send(streamarr);
+          //   stream.request.abort();
+          //   return;
+          // }
           // A successful connection resets retry count.
           retryAttempt = 0;
         } catch (e) {
@@ -128,10 +137,11 @@ const filteredstream = async (req, res) => {
 
     try {
       // Gets the complete list of rules currently applied to the stream
+      console.log(rules);
       currentRules = await getAllRules();
 
       // Delete all rules. Comment the line below if you want to keep your existing rules.
-      //await deleteAllRules(currentRules);
+      await deleteAllRules(currentRules);
 
       // Add rules to the stream. Comment the line below if you don't want to add new rules.
       await setRules();
@@ -143,5 +153,6 @@ const filteredstream = async (req, res) => {
     // Listen to the stream.
     streamConnect(0);
   })();
+  return;
 };
 module.exports = { filteredstream };
