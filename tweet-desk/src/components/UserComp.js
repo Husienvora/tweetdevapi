@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGlobalContext } from "./context";
 import { ToastContainer, toast } from "react-toastify";
+import LoadingBar from "react-top-loading-bar";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const UserComp = () => {

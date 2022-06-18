@@ -22,12 +22,8 @@ app.use(
 );
 app.use(helmet());
 app.use(cors());
-// const corsOptions = {
-//   origin: "*",
-//   credentials: true, //access-control-allow-credentials:true
-//   optionSuccessStatus: 200,
-// };
-// app.use(cors(corsOptions));
+app.options("*", cors());
+
 app.use(xss());
 app.use(mongoSanitize());
 

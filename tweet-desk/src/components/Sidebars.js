@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useGlobalContext } from "./context";
 import { FaSpinner } from "react-icons/fa";
-
+import { BiLogOut } from "react-icons/bi";
 const Sidebars = () => {
   const {
     setaLogin,
@@ -12,21 +12,20 @@ const Sidebars = () => {
     setCookie,
     setFollowing,
     setFollowers,
+    Logout,
     ChangedCurr,
     setChangedCurr,
   } = useGlobalContext();
 
   useEffect(() => {
-    if (!Users || parseInt(cookies.accountCount) != Users.length) {
-      for (let i = 0; i <= Users.length - 1; i++) {
-        if (!eval(`cookies.${Users[i]}`)) {
-          User_avatar(Users[i]);
-        }
+    for (let i = 0; i <= Users.length - 1; i++) {
+      if (!eval(`cookies.${Users[i]}`)) {
+        User_avatar(Users[i]);
       }
     }
 
     //setUserAvatar([...new Set(UserAvatar)]);
-  }, [Users]);
+  }, []);
   if (Users.length == 0 || Users.length != parseInt(cookies.accountCount)) {
     window.location.reload();
   }
@@ -34,8 +33,20 @@ const Sidebars = () => {
   return (
     <>
       {console.log(Users)}
-      <div className="fixed top-11 h-screen w-11 bg-gray-300 "></div>
-      <div className="fixed h-11 w-screen bg-gray-300 ">
+      <div className="fixed top-11 h-screen w-11 bg-gray-300 ">
+        <div className="flex justify-start py-1  flex-nowrap w-auto ">
+          <div className="mx-1">
+            <button
+              onClick={() => {
+                Logout();
+              }}
+            >
+              <BiLogOut className="mt-1" size={29} />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className=" fixed h-11 w-screen bg-gray-300 ">
         <div className="flex justify-start py-1  flex-nowrap w-auto ">
           {Users.map((user, index) => {
             return (
@@ -81,12 +92,9 @@ const Sidebars = () => {
         </div>
         <div className=" -z-20 flex justify-center relative bottom-10 space-x-1 ">
           <div>
-            <img
-              className="h-6"
-              src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
-            ></img>
+            <img className="h-6" src="./coffee.png"></img>
           </div>
-          <div>TweetDesk</div>
+          <div className=" ">TweetDesk</div>
         </div>
         <div className="-z-10 flex justify-end relative bottom-16 right-3">
           About project

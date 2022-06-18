@@ -20,9 +20,9 @@ const userTimeline = (req, res) => {
     // we request the author_id expansion so that we can print out the user name later
     let params = {
       max_results: 100,
-      "tweet.fields": "created_at,attachments",
-      "media.fields": "height,url",
-      expansions: "author_id,attachments.media_keys",
+      "tweet.fields": "created_at",
+
+      expansions: "author_id",
     };
 
     const options = {

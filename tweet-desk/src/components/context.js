@@ -11,7 +11,8 @@ import { toast } from "react-toastify";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const BaseUrl = "http://localhost:5000/api/v1";
+  // const BaseUrl = "http://localhost:5000/api/v1";
+  const BaseUrl = "https://husien-twitter-api.herokuapp.com/api/v1";
   const [Streamcache, setStreamcache] = useState([]);
   const [Username, setUsername] = useState(null);
   const [Followers, setFollowers] = useState(null);
@@ -59,6 +60,27 @@ const AppProvider = ({ children }) => {
     setUsers(LoggedIn);
   }, []);
 
+  const Logout = async () => {
+    const data = await axios
+      .post(BaseUrl + "/twitter/Logout", {
+        users: Users,
+      })
+      .then((res) => {
+        return res.data;
+      });
+    if (data == "done") {
+      setCookie("accountCount", "0", { path: "/" });
+      for (let i = 0; i <= Users.length - 1; i++) {
+        if (eval(`cookies.${Users[i]}`)) {
+          cookies.remove(Users[i]);
+        }
+      }
+      for (let j = 1; j <= Users.length; j++) {
+        cookies.remove(`User${j}`);
+      }
+    }
+    window.location.reload();
+  };
   const ChangeCurruser = (user) => {
     const fromIndex = Users.indexOf(user);
     const toIndex = 0;
@@ -73,6 +95,7 @@ const AppProvider = ({ children }) => {
   const User_avatar = async (twitterUsername) => {
     try {
       let user = twitterUsername;
+      console.log("im in");
       let avatarUrl = await axios
         .post(BaseUrl + "/twitter/user-photo", {
           twitterUsername: twitterUsername,
@@ -102,24 +125,30 @@ const AppProvider = ({ children }) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
   const Enterpin = async (pin) => {
-    let user = await axios
-      .post(BaseUrl + "/twitter/authentication", {
-        pin: pin,
-      })
+    try {
+      let user = await axios
+        .post(BaseUrl + "/twitter/authentication", {
+          pin: pin,
+        })
 
-      .then((res) => {
-        return res.data;
+        .then((res) => {
+          return res.data;
+        });
+      setCookie("accountCount", String(parseInt(cookies.accountCount) + 1), {
+        path: "/",
       });
-    setCookie("accountCount", String(parseInt(cookies.accountCount) + 1), {
-      path: "/",
-    });
 
-    setCookie(`User${parseInt(cookies.accountCount) + 1}`, user, { path: "/" });
-    User_avatar(user.User);
-    setaLogin(false);
-    setaLoading(false);
+      setCookie(`User${parseInt(cookies.accountCount) + 1}`, user, {
+        path: "/",
+      });
+      User_avatar(user.User);
+      setaLogin(false);
+      setaLoading(false);
 
-    setAenterPin(false);
+      setAenterPin(false);
+    } catch (error) {
+      Enterpin(pin);
+    }
   };
 
   // const Stream = async () => {
@@ -563,7 +592,7 @@ const AppProvider = ({ children }) => {
         setUserAvatar,
         setStreamcache,
         ChangeCurruser,
-
+        Logout,
         cookies,
         AenterPin,
         LoggedIn,

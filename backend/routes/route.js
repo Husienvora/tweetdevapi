@@ -28,8 +28,10 @@ const { getUser } = require("../controllers/apicontrols/getUser");
 const {
   getNoofferandfin,
 } = require("../controllers/apicontrols/getNoofferandfin");
+const { Logout } = require("../controllers/apicontrols/Logout");
 router.route("/authentication").get(_initauth).post(exec);
 router.route("/like").post(like_tweet).delete(unlike_tweet);
+
 router
   .route("/follow")
 
@@ -48,4 +50,5 @@ router.route("/block").post(Block_user);
 router.route("/unblock").delete(unBlock_user);
 router.route("/getnoof").post(getNoofferandfin);
 router.route("/usertimeline").post(userTimeline);
+router.route("/Logout").post(Logout);
 module.exports = router;

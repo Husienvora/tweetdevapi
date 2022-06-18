@@ -11,10 +11,7 @@ const Login = () => {
     <>
       <div className=" -z-20 flex justify-center mt-7 space-x-1 ">
         <div>
-          <img
-            className="h-6"
-            src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
-          ></img>
+          <img className="h-6" src="./coffee.png"></img>
         </div>
         <div>TweetDesk</div>
       </div>
@@ -30,7 +27,7 @@ const Login = () => {
             </div>
             <div>
               <button
-                className="bg-cyan-400 py-1 px-3 rounded-xl shadow-xl hover:bg-cyan-300 ml-8 f"
+                className="bg-cyan-400 py-1 px-3  shadow-xl hover:bg-cyan-300 ml-8 f"
                 onClick={() => {
                   Enterpin(String(inputPin.current.innerHTML));
                   setaLoading(true);

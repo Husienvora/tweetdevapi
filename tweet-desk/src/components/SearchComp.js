@@ -4,20 +4,34 @@ import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import { useGlobalContext } from "./context";
 import Heart from "react-animated-heart";
 import "../index.css";
+import { FaSpinner } from "react-icons/fa";
 import axios from "axios";
+
+import LoadingBar from "react-top-loading-bar";
+
 const SearchComp = () => {
   const search = useRef();
   const [Url, setUrl] = useState();
   const [TempFollower, setTempFollower] = useState();
   const [TempFollowing, setTempFollowing] = useState();
   const [Tweets, setTweets] = useState([]);
-  const { BaseUrl, Like_a_Tweet, Retweet, Undo_a_like, Undo_Retweet } =
-    useGlobalContext();
+  const {
+    BaseUrl,
+    Like_a_Tweet,
+    Retweet,
+    Undo_a_like,
+    Undo_Retweet,
+    Follow_UserId,
+    Unfollow_UserId,
+  } = useGlobalContext();
   const [Searched, setSearched] = useState(false);
   const [isClick, setClick] = useState(false);
   const [Templike, setTemplike] = useState([]);
   const [Tempretweet, setTempretweet] = useState([]);
+  const [FollowedUser, setFollowedUser] = useState([]);
   const id = useRef();
+
+  const Loading = useRef();
   const getUser = async (user) => {
     let Userdata = await axios
       .post(BaseUrl + "/twitter/finduser", {
@@ -34,13 +48,6 @@ const SearchComp = () => {
         return res.data;
       });
 
-    let url = await axios
-      .post(BaseUrl + "/twitter/user-photo", {
-        twitterUsername: user,
-      })
-      .then((res) => {
-        return res.data;
-      });
     let following = await axios
       .post(BaseUrl + "/twitter/follow/following", {
         userId: String(Userdata["data"][0]["id"]),
@@ -55,18 +62,28 @@ const SearchComp = () => {
       .then((res) => {
         return res.data;
       });
-
-    setUrl(url);
+    let url = await axios
+      .post(BaseUrl + "/twitter/user-photo", {
+        twitterUsername: user,
+      })
+      .then((res) => {
+        return res.data;
+      });
+    tweets.splice(-1);
+    setTweets(tweets);
 
     setTempFollower(follower);
     setTempFollowing(following);
-    setTweets(tweets);
+
+    setUrl(url);
     setSearched(true);
+    Loading.current.complete();
   };
 
   return (
     <>
       <div className=" bg-white border-l-2 md-1:order-3">
+        <LoadingBar color="#00FFFF" ref={Loading} />
         <div
           id="Search"
           className="bg-white mx-2 h-10 flex justify center"
@@ -86,8 +103,9 @@ const SearchComp = () => {
           <button
             className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
             onClick={() => {
-              getUser(search.current.innerHTML);
+              Loading.current.continuousStart();
               setSearched(false);
+              getUser(search.current.innerHTML);
             }}
           >
             Search
@@ -109,7 +127,7 @@ const SearchComp = () => {
                 <div className="">
                   {TempFollower ? (
                     TempFollower[0]["formatted_followers_count"].replace(
-                      "followers",
+                      /followers|follower/gi,
                       ""
                     )
                   ) : (
@@ -132,19 +150,43 @@ const SearchComp = () => {
               </div>
             </div>
             <div className="flex justify-center mb-2 mt-2">
-              <button className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300">
-                Follow
-              </button>
+              {!FollowedUser.includes(TempFollower[0]["id"]) ? (
+                <button
+                  className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+                  onClick={() => {
+                    Follow_UserId(TempFollower[0]["id"]);
+                    setFollowedUser((oldarr) => [
+                      ...oldarr,
+                      TempFollower[0]["id"],
+                    ]);
+                  }}
+                >
+                  Follow
+                </button>
+              ) : (
+                <button
+                  className="bg-cyan-400 border-2 mr-2 pl-5 pr-5  rounded-2xl shadow-lg hover:bg-cyan-300"
+                  onClick={() => {
+                    Unfollow_UserId(TempFollower[0]["id"]);
+                    let filteredArray = FollowedUser.filter(
+                      (item) => item !== TempFollower[0]["id"]
+                    );
+                    setFollowedUser(filteredArray);
+                  }}
+                >
+                  Unfollow
+                </button>
+              )}
             </div>
 
             <div className="  h-h-97 overflow-auto rounded-md  ">
               <div className="  relative h-auto  mx-3 mt-1 shadow-2xl g bg-white flex flex-col overflow-auto ">
+                {console.log(Tweets)}
                 {Tweets.length != 0 ? (
                   Tweets.map((tweet) => {
                     return (
                       <div className="" key={tweet.id}>
                         <div className=" font-thin border-y-8 rounded-xl  border-b-2">
-                          <div>author-id:{tweet.author_id}</div>
                           <div ref={id}>tweet-id:{tweet.id}</div>
                           <div>{tweet.text}</div>
                         </div>
@@ -175,17 +217,6 @@ const SearchComp = () => {
                                 <FcLikePlaceholder size={30} />
                               </button>
                             )}
-
-                            {/* <Heart
-                              isClick={
-                                Templike.includes(tweet.id) ? true : false
-                              }
-                              onClick={() => {
-                                Like_a_Tweet(tweet.id);
-                                setTemplike((oldarr) => [...oldarr, tweet.id]);
-                              }}
-                              styles="height:100vw"
-                            /> */}
                           </div>
                           <div>
                             {Tempretweet.includes(tweet.id) ? (
